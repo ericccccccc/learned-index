@@ -89,21 +89,20 @@ class Learned_Index():
                     xx = np.array(sub_data[j])
                     yy = np.array(sub_y[j])
 
+                    min_err = max_err = 0
                     if xx.size > 0:
                         xx = np.reshape(xx,(-1,1))
                         self.index[1][j].fit(xx, yy)
                         
-
-                # 計算最後一層 Model 的 min_err/max_err
-                min_err = max_err = 0
-                for i in range(data.size):
-                    pred_pos, _ = self.predict(data[i])
-                    err = pred_pos - i
-                    if err < min_err:
-                        min_err = math.floor(err)
-                    elif err > max_err:
-                        max_err = math.ceil(err)
-                self.error_bound.append([min_err, max_err])
+                        # 計算最後一層 Model 的 min_err/max_err
+                        for i in range(data.size):
+                            pred_pos, _ = self.predict(data[i])
+                            err = pred_pos - i
+                            if err < min_err:
+                                min_err = math.floor(err)
+                            elif err > max_err:
+                                max_err = math.ceil(err)
+                    self.error_bound.append([min_err, max_err])
 
                 
     def predict(self, key):
